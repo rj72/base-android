@@ -48,13 +48,13 @@ class ThirdFragment : Fragment() {
             Request.Method.GET,
             url,
             null
-            , { response ->
+            , {
             // on below line we are setting our response to our text view.
-            val joke = Joke.fromJson(response)
+            val joke = Joke.fromJson(it)
             dataView.text = joke.toString()
-        }, { error ->
+        }, {
             // this method is called when we get any error and we are displaying an error message.
-            dataView.text = error.message
+            dataView.text = it.message
         })
 
         queue.add(request)

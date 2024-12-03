@@ -17,8 +17,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.squareup.picasso.Picasso
 import mg.techlab.mobile.myapp.MainActivity
 import mg.techlab.mobile.myapp.R
+import mg.techlab.mobile.myapp.datamanager.PersonManager
 import java.io.File
 
 
@@ -30,53 +32,48 @@ class SecondFragment : Fragment() {
     private var selectGalleryLauncher: ActivityResultLauncher<PickVisualMediaRequest>? = null
 
     private val cameraPermissionResult =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-
-            if (!granted) (context as MainActivity).showToast("The camera permission is necessary")
-
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) (context as MainActivity).showToast("The camera permission is necessary")
         }
 
     private val galleryPermissionResult =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-
             if (granted) openGallery() else (context as MainActivity).showToast("read gallery permission is necessary")
-
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
 
         val view = inflater.inflate(R.layout.fragment_second, container, false)
 
         nameView = view.findViewById(R.id.txt_view_data)
         imageView = view.findViewById(R.id.img_captured)
-        nameView.text = arguments?.getString("person")
+        //nameView.text = arguments?.getString("person")
+        val name = "Pers1"
+
+
+        nameView.text = PersonManager.findByName("Pers1").toString()
 
         cameraPermissionResult.launch(Manifest.permission.CAMERA)
-
         galleryPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
 
 
         view.findViewById<Button>(R.id.btn_camera).setOnClickListener {
             launchCamera()
         }
-
         view.findViewById<Button>(R.id.btn_gallery).setOnClickListener {
             openGallery()
         }
 
         takePictureLauncher =
-            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-                if (success) {
-                    imageView.setImageURI(photoUri)
+            registerForActivityResult(ActivityResultContracts.TakePicture()) {
+                if (it) {
+                    Picasso.get().load(photoUri).resize(100, 100).
+                    centerCrop().into(imageView);
+                    //imageView.setImageURI(photoUri)
                 }
             }
 

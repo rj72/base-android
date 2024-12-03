@@ -1,12 +1,11 @@
 package mg.techlab.mobile.myapp.data
 
 import org.json.JSONObject
-
 data class Joke(
     val type: String,
     val setup: String,
     val punchline: String,
-    val id: Int
+    val id: Int,
 ) {
     companion object {
         fun fromJson(json: JSONObject): Joke {

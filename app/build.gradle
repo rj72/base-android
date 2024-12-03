@@ -1,7 +1,19 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    //for realm
+    id 'org.jetbrains.kotlin.kapt'
+
+
+
+
+
+    //for databinding
+    id 'kotlin-kapt'
 }
+
+//for realm
+apply plugin : "realm-android"
 
 android {
     namespace 'mg.techlab.mobile.myapp'
@@ -30,6 +42,12 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+
+    buildFeatures {
+        buildConfig true
+        viewBinding true
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -44,7 +62,7 @@ dependencies {
     androidTestImplementation libs.androidx.espresso.core
 
     implementation (libs.volley)
-    
+
     implementation (libs.picasso)
 
 }
